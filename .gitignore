@@ -1,0 +1,13 @@
+/dkt/.empty/
+/dkt/asset/
+/dkt/dkt/__pycache__/
+/dkt/models/
+/dkt/wandb/
+/dkt/run.log
+/dkt/outputs/
+/lightgcn/outputs/
+/lightgcn/models/
+__init__.py
+README.md
+*.log
+*.pt
