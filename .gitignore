@@ -7,7 +7,12 @@
 /dkt/outputs/
 /lightgcn/outputs/
 /lightgcn/models/
+/lightgcn/wandb/
+/lightgcn/__pycache__
+/lightgcn/__init__
+/lightgcn/.empty
 __init__.py
 README.md
 *.log
 *.pt
+*.pyc
