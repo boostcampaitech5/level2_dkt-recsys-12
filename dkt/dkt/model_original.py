@@ -11,20 +11,14 @@ class ModelBase(nn.Module):
         n_tests: int = 1538,
         n_questions: int = 9455,
         n_tags: int = 913,
-        n_mains: int = 9,       #task7
-        n_subs: int = 198,
-        n_probs: int = 13,
     ):
         super().__init__()
         self.hidden_dim = hidden_dim
         self.n_layers = n_layers
         self.n_tests = n_tests
         self.n_questions = n_questions
-        self.n_tags = n_tags,
-        self.n_mains = n_mains,       #task8
-        self.n_subs = n_subs,
-        self.n_probs = n_probs
-        
+        self.n_tags = n_tags
+
         # Embeddings
         # hd: Hidden dimension, intd: Intermediate hidden dimension
         hd, intd = hidden_dim, hidden_dim // 3
@@ -32,35 +26,26 @@ class ModelBase(nn.Module):
         self.embedding_test = nn.Embedding(n_tests + 1, intd)
         self.embedding_question = nn.Embedding(n_questions + 1, intd)
         self.embedding_tag = nn.Embedding(n_tags + 1, intd)
-        self.embedding_main = nn.Embedding(n_mains + 1, intd)     #task9
-        self.embedding_sub = nn.Embedding(n_subs + 1, intd)
-        self.embedding_prob = nn.Embedding(n_probs + 1, intd)
 
         # Concatentaed Embedding Projection
-        self.comb_proj = nn.Linear(intd * 7, hd)        #task10
+        self.comb_proj = nn.Linear(intd * 4, hd)
 
         # Fully connected layer
         self.fc = nn.Linear(hd, 1)
     
-    def forward(self, test, question, tag, main, sub, prob, correct, mask, interaction):        #task11
+    def forward(self, test, question, tag, correct, mask, interaction):
         batch_size = interaction.size(0)
         # Embedding
         embed_interaction = self.embedding_interaction(interaction.int())
         embed_test = self.embedding_test(test.int())
         embed_question = self.embedding_question(question.int())
         embed_tag = self.embedding_tag(tag.int())
-        embed_main = self.embedding_main(main.int())        #task12
-        embed_sub = self.embedding_sub(sub.int())
-        embed_prob = self.embedding_prob(prob.int())
         embed = torch.cat(
             [
                 embed_interaction,
                 embed_test,
                 embed_question,
                 embed_tag,
-                embed_main,     #task13
-                embed_sub,
-                embed_prob,
             ],
             dim=2,
         )
@@ -76,9 +61,6 @@ class LSTM(ModelBase):
         n_tests: int = 1538,
         n_questions: int = 9455,
         n_tags: int = 913,
-        n_mains: int = 9,       #task14
-        n_subs: int = 198,
-        n_probs: int = 13,
         **kwargs
     ):
         super().__init__(
@@ -86,23 +68,17 @@ class LSTM(ModelBase):
             n_layers,
             n_tests,
             n_questions,
-            n_tags,
-            n_mains,        #task15
-            n_subs,
-            n_probs
+            n_tags
         )
         self.lstm = nn.LSTM(
             self.hidden_dim, self.hidden_dim, self.n_layers, batch_first=True
         )
 
-    def forward(self, test, question, tag, correct, main, sub, prob, mask, interaction):        #task16
+    def forward(self, test, question, tag, correct, mask, interaction):
         X, batch_size = super().forward(test=test,
                                         question=question,
                                         tag=tag,
                                         correct=correct,
-                                        main=main,      #task17
-                                        sub=sub,
-                                        prob=prob,
                                         mask=mask,
                                         interaction=interaction)
         out, _ = self.lstm(X)
