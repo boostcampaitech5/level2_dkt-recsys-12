@@ -5,8 +5,13 @@
 /dkt/wandb/
 /dkt/run.log
 /dkt/outputs/
-/lightgcn/outputs/
+/lightgcn/.empty/
+/lightgcn/asset/
+/lightgcn/lightgcn/__pycache__/
 /lightgcn/models/
+/lightgcn/wandb/
+/lightgcn/run.log
+/lightgcn/outputs/
 __init__.py
 README.md
 *.log
